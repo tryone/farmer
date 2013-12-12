@@ -6,6 +6,9 @@ an async task execution app based on ansible
 # First Of All !
 you should deploy your ansible cluster
 
+#Screenshot
+![Screenshot](https://raw.github.com/huoxy/farmer/master/farmer.png)
+
 # Running
 
 ```
