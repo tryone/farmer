@@ -5,8 +5,7 @@
     <tr>
       <th>#</th>
       <th>Shell Command</th>
-      <th>Start</th>
-      <th>End</th>
+      <th>Start / End</th>
       <th>Return Code</th>
       <th>More &#187;</th>
     </tr>
@@ -14,14 +13,13 @@
   <tbody>
 {% for job in jobs %}
     <tr>
-      <td>{{ job.id }}</td>
-      <td>{{ job.cmd_shell }}</td>
-      <td>{{ job.start }}</td>
-      <td>{{ job.end }}</td>
+      <td style = 'width: 30px;'>{{ job.id }}</td>
+      <td style = 'width: 800px;'>{{ job.cmd_shell }}</td>
+      <td>{{ job.start }} <br /> {{ job.end }}</td>
       <td>{{ job.rc }}</td>
-      <td>
+      <td style = 'width: 150px;'>
         <a href = '/detail/{{ job.id }}'>detail</a>
-        {% if job.rc %}
+        {% if job.rc != '0' %}
         <a href = '/retry/{{ job.id }}'>retry</a>
         {% endif %}
       </td>

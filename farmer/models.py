@@ -30,11 +30,13 @@ class Job(models.Model):
 
     @property
     def cmd_shell(self):
-        option = self.sudo and '--sudo -f 20 -m shell -a' or '-f 20 -m shell -a'
-        return 'ansible %s %s "%s"' % (self.inventories, option, self.cmd)
+        option = self.sudo and '--sudo' or ''
+        option += ' -f 20 -m shell'
+        return 'ansible %s %s -a "%s"' % (self.inventories, option, self.cmd)
 
     def run(self):
         if os.fork() == 0:
+        #if 0 == 0:
             tmpdir = '/tmp/ansible_%s' % time.time()
             os.mkdir(tmpdir)
             self.start = datetime.now()

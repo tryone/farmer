@@ -26,7 +26,7 @@ def home(request):
 def detail(request, id):
     assert(request.method == 'GET')
     job = Job.objects.get(id = id)
-    result = json.loads(job.result)
+    result = job.result and json.loads(job.result) or {}
     failures = {}
     success = {}
     for k, v in result.items():
@@ -40,15 +40,21 @@ def detail(request, id):
 def retry(request, id):
     assert(request.method == 'GET')
     job = Job.objects.get(id = id)
-    result = json.loads(job.result)
-    failures = {}
-    for k, v in result.items():
-        if v.get('rc'):
-            failures[k] = v
-    assert(failures)
-    failures = failures.keys()
+    if job.result is None:
+        inventories = job.inventories
+    else:
+        result = json.loads(job.result)
+        failures = {}
+        for k, v in result.items():
+            if v.get('rc'):
+                failures[k] = v
+        failures = failures.keys()
+        if failures:
+            inventories = ':'.join(failures)
+        else:
+            inventories = job.inventories
     newjob = Job()
-    newjob.inventories = ':'.join(failures)
+    newjob.inventories = inventories
     newjob.cmd = job.cmd
     newjob.run()
     return redirect('/')
