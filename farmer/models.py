@@ -30,7 +30,7 @@ class Job(models.Model):
 
     @property
     def cmd_shell(self):
-        option = self.sudo and '--sudo -m shell -a' or '-m shell -a'
+        option = self.sudo and '--sudo -f 20 -m shell -a' or '-f 20 -m shell -a'
         return 'ansible %s %s "%s"' % (self.inventories, option, self.cmd)
 
     def run(self):
