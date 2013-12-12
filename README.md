@@ -10,12 +10,12 @@ you should deploy your ansible cluster
 see: https://github.com/ansible/ansible
 
 #Screenshot
-![Screenshot](https://raw.github.com/huoxy/farmer/master/farmer.png)
+![Screenshot](https://raw.github.com/douban/farmer/master/farmer.png)
 
 # Running
 
 ```
-git clone https://github.com/huoxy/farmer.git
+git clone https://github.com/douban/farmer.git
 cd farmer
 python manage.py syncdb
 ```
