@@ -157,3 +157,18 @@ LOGGING = {
         },
     }
 }
+
+AUTH_LDAP_SERVER_URI = 'ldaps://ldap.douban.com'
+AUTH_LDAP_BIND_DN = ''
+AUTH_LDAP_BIND_PASSWORD = ''
+# AUTH_LDAP_START_TLS = True
+# Cache group memberships for an hour to minimize LDAP traffic
+AUTH_LDAP_CACHE_GROUPS = True
+AUTH_LDAP_GROUP_CACHE_TIMEOUT = 3600
+
+AUTH_LDAP_USER_DN_TEMPLATE = 'uid=%(user)s,ou=people,dc=douban,dc=com'
+
+AUTHENTICATION_BACKENDS = (
+    'django_auth_ldap.backend.LDAPBackend',
+    'django.contrib.auth.backends.ModelBackend',
+)
