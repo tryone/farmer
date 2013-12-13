@@ -7,7 +7,7 @@ an async task execution app based on ansible
 
 you should deploy your [ansible](https://github.com/ansible/ansible) cluster
 
-see: https://github.com/ansible/ansible
+see: http://www.ansibleworks.com/docs/intro_getting_started.html
 
 #Screenshot
 ![Screenshot](https://raw.github.com/douban/farmer/master/farmer.png)
