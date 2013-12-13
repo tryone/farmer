@@ -23,8 +23,8 @@ class Task(models.Model):
     # return code of this job
     rc = models.IntegerField(null = True) 
 
-    start = models.DateTimeField(null = True)
-    end = models.DateTimeField(null = True)
+    start = models.DateTimeField(null = True, blank = False)
+    end = models.DateTimeField(null = True, blank = False)
 
     @property
     def cmd_shell(self):
@@ -81,8 +81,8 @@ class Job(models.Model):
     task = models.ForeignKey(Task)
     host = models.TextField(null = False, blank = False)
     cmd = models.TextField(null = False, blank = False)
-    start = models.DateTimeField(null = True)
-    end = models.DateTimeField(null = True)
+    start = models.DateTimeField(null = True, blank = False)
+    end = models.DateTimeField(null = True, blank = False)
     rc = models.IntegerField(null = True) 
     stdout = models.TextField(null = True)
     stderr = models.TextField(null = True)

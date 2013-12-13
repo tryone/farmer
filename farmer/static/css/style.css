@@ -93,9 +93,16 @@ main {
   text-decoration: none;
 }
 
-th.detail-command {
-  width: 50%;
+th.detail-command, .home-shell-command {
+  width: 60%;
+  word-break: break-all;
 }
+
+.th-id {
+  width: 30px;
+}
+
+
 
 
 /*

@@ -35,12 +35,25 @@ def detail(request, id):
 def retry(request, id):
     assert(request.method == 'GET')
     task = Task.objects.get(id = id)
-    failure_hosts = sorted([job.host for job in task.job_set.all()])
+    failure_hosts = [job.host for job in task.job_set.all() if job.rc]
     assert(failure_hosts)
     newtask = Task()
     newtask.inventories = ':'.join(failure_hosts)
     newtask.cmd = task.cmd
     newtask.run()
     return redirect('/')
+
+@staff_member_required
+def rerun(request, id):
+    assert(request.method == 'GET')
+    task = Task.objects.get(id = id)
+    failure_hosts = [job.host for job in task.job_set.all() if job.rc]
+    assert(len(failure_hosts) == 0)
+    newtask = Task()
+    newtask.inventories = task.inventories
+    newtask.cmd = task.cmd
+    newtask.run()
+    return redirect('/')
+
 
 
