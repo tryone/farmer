@@ -21,7 +21,7 @@ class Task(models.Model):
     cmd = models.TextField(null = False, blank = False)
 
     # return code of this job
-    rc = models.IntegerField(null = True) 
+    rc = models.IntegerField(default = 1) 
 
     start = models.DateTimeField(null = True)
     end = models.DateTimeField(null = True)
@@ -62,7 +62,7 @@ class Task(models.Model):
                 job.rc = result.get('rc')
                 job.stdout = result.get('stdout')
                 job.stderr = result.get('stderr')
-#                job.save()
+                job.save()
 
             self.save()
 
@@ -78,7 +78,7 @@ class Job(models.Model):
     cmd = models.TextField(null = False, blank = False)
     start = models.DateTimeField(null = True)
     end = models.DateTimeField(null = True)
-    rc = models.IntegerField(null = True) 
+    rc = models.IntegerField(default = 1) 
     stdout = models.TextField(null = True)
     stderr = models.TextField(null = True)
 
