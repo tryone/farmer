@@ -5,7 +5,7 @@ an async task execution app based on ansible
 
 # First Of All !
 
-you should deploy your ansible cluster
+you should deploy your [ansible](https://github.com/ansible/ansible) cluster
 
 see: https://github.com/ansible/ansible
 
