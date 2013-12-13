@@ -1,8 +1,10 @@
 #coding=utf8
+from __future__ import with_statement
 
 import os
 import time
 import json
+from tempfile import mkdtemp
 from datetime import datetime
 from commands import getstatusoutput
 
@@ -14,14 +16,14 @@ class Job(models.Model):
     inventories = models.TextField(null = False, blank = False)
 
     # 0, do not use sudo; 1, use sudo .
-    sudo = models.BooleanField(default = True) 
+    sudo = models.BooleanField(default = True)
 
     # for example: ansible web_servers -m shell -a 'du -sh /tmp'
     # the 'du -sh /tmp' is cmd here
     cmd = models.TextField(null = False, blank = False)
 
     # return code of this job
-    rc = models.IntegerField(null = True) 
+    rc = models.IntegerField(null = True)
 
     result = models.TextField(null = True)
 
@@ -37,8 +39,7 @@ class Job(models.Model):
     def run(self):
         if os.fork() == 0:
         #if 0 == 0:
-            tmpdir = '/tmp/ansible_%s' % time.time()
-            os.mkdir(tmpdir)
+            tmpdir =  mkdtemp(prefix='ansible_', dir='/tmp')
             self.start = datetime.now()
             self.save()
             cmd_shell = self.cmd_shell + ' -t ' + tmpdir
@@ -46,13 +47,12 @@ class Job(models.Model):
             self.end = datetime.now()
             result = {}
             for f in os.listdir(tmpdir):
-                result[f] = json.loads(open(tmpdir + '/' + f).read())
+                with open(os.path.join(tmpdir, f)) as rf:
+                    result[f] = json.loads(rf.read())
             self.rc = status
             self.result = json.dumps(result)
             self.save()
-            os.system('rm -rf ' + tmpdir)
+            os.removedirs(tmpdir)
 
     def __unicode__(self):
         return self.cmd_shell
-
-
