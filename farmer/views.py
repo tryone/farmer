@@ -25,10 +25,13 @@ def home(request):
 @staff_member_required
 def detail(request, id):
     assert(request.method == 'GET')
+    jobid = request.GET.get('jobid', '')
+    if jobid.isdigit():
+        jobid = int(jobid)
+    else:
+        jobid = -1
     task = Task.objects.get(id = id)
     jobs = task.job_set.all().order_by('-rc')
-    #failed_jobs = filter(lambda job: job.rc, jobs)
-    #succeed_jobs = filter(lambda job: not job.rc, jobs)
     return render_to_response('detail.html', locals())
 
 @staff_member_required

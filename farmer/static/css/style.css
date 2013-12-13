@@ -78,19 +78,24 @@ main {
 
 .table > tbody > tr > td > a {
   font-weight: bold;
-  color: white;
+  text-decoration: underline;
+/*
   border: 1px solid white;
   border-radius: 4px;
   padding: 2px;
   padding-left: 6px;
   padding-right: 6px;
   text-decoration: none;
+*/
 }
 
 .table > tbody > tr > td > a:hover {
+  color: white;
+/*
   background-color: white;
-  color: rgb(86, 61, 124);
   text-decoration: none;
+  color: rgb(86, 61, 124);
+*/
 }
 
 th.detail-command, .home-shell-command {
@@ -117,13 +122,15 @@ pre {
 }
 
 .green-text {
-  font-weight: bold;
   color: #7A7;
 }
 
 .red-text {
-  font-weight: bold;
   color: #F77;
+}
+
+.white-text {
+  color: white;
 }
 
 

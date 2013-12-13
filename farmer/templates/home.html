@@ -32,14 +32,16 @@
         N/A
         {% endif %}
       </td>
-      <td><a href = '/detail/{{ task.id }}'>detail</a></td>
+      <td>
+        <a class = 'green-text' href = '/detail/{{ task.id }}'>detail</a>
+      </td>
       <td>
         {% if task.rc %}
-        <a href = '/retry/{{ task.id }}'>retry</a>
+        <a class = 'red-text' href = '/retry/{{ task.id }}'>retry</a>
         {% endif %}
       </td>
       <td>
-        <a href = '/rerun/{{ task.id }}'>rerun</a>
+        <a class = 'red-text' href = '/rerun/{{ task.id }}'>rerun</a>
       </td>
     </tr>
 {% endfor %}
