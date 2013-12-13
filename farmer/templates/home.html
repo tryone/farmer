@@ -14,7 +14,7 @@
 {% for task in tasks %}
     <tr>
       <td style = 'width: 30px;'>{{ task.id }}</td>
-      <td style = 'width: 800px; word-wrap: break-word;'>{{ task.cmd_shell }}</td>
+      <td style = 'width: 800px;'>{{ task.cmd_shell }}</td>
       <td>{{ task.start | date:"Y-m-d G:i:s" }} <br /> {{ task.end | date:"Y-m-d G:i:s" }}</td>
       <td>{{ task.rc }}</td>
       <td style = 'width: 150px;'>
