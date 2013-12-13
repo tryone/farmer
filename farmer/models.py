@@ -33,8 +33,8 @@ class Task(models.Model):
         return 'ansible %s %s -a "%s"' % (self.inventories, option, self.cmd)
 
     def run(self):
-        if os.fork() == 0:
-        #if 0 == 0:
+        #if os.fork() == 0:
+        if 0 == 0:
             self.start = datetime.now()
             self.save()
 

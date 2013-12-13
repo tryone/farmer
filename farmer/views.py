@@ -4,7 +4,7 @@ import json
 from django.shortcuts import render_to_response, redirect
 from django.contrib.admin.views.decorators import staff_member_required
 
-from farmer.models import Job
+from farmer.models import Task, Job
 
 @staff_member_required
 def home(request):
@@ -13,13 +13,13 @@ def home(request):
         cmd = request.POST.get('cmd', '')
         if '' in [inventories.strip(), cmd.strip()]:
             return redirect('/')
-        job = Job()
-        job.inventories = inventories
-        job.cmd = cmd
-        job.run()
+        task = Task()
+        task.inventories = inventories
+        task.cmd = cmd
+        task.run()
         return redirect('/')
     else:
-        jobs = Job.objects.all().order_by('-id')
+        tasks = Task.objects.all().order_by('-id')
         return render_to_response('home.html', locals())
 
 @staff_member_required
