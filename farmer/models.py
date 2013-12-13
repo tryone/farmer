@@ -62,7 +62,7 @@ class Task(models.Model):
                 job.rc = result.get('rc')
                 job.stdout = result.get('stdout')
                 job.stderr = result.get('stderr')
-                job.save()
+#                job.save()
 
             self.save()
 

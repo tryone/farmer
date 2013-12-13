@@ -1,19 +1,19 @@
 {% extends "base.html" %}
 {% block content %}
-{% if failures %}
-<h1>Failures</h1>
+{% if failed_jobs %}
+<h1>Failed Jobs</h1>
 <ol>
-{% for k, v in failures.items %}
-<li>{{ k }} : {{ v }}</li>
+{% for job in failed_jobs %}
+<li>{{ job.host }} : {{ job.stderr }}</li>
 {% endfor %}
 </ol>
 {% endif %}
 
-{% if success %}
-<h1>Success</h1>
+{% if succeed_jobs %}
+<h1>Succeed Jobs</h1>
 <ol>
-{% for k, v in success.items %}
-<li>{{ k }} : {{ v }}</li>
+{% for job in succeed_jobs %}
+<li>{{ job.host }} : {{ job.stdout }}</li>
 {% endfor %}
 </ol>
 {% endif %}
