@@ -21,7 +21,7 @@ class Task(models.Model):
     cmd = models.TextField(null = False, blank = False)
 
     # return code of this job
-    rc = models.IntegerField(default = 1) 
+    rc = models.IntegerField(null = True) 
 
     start = models.DateTimeField(null = True)
     end = models.DateTimeField(null = True)
@@ -33,8 +33,8 @@ class Task(models.Model):
         return 'ansible %s %s -a "%s"' % (self.inventories, option, self.cmd)
 
     def run(self):
-        #if os.fork() == 0:
-        if 0 == 0:
+        if os.fork() == 0:
+        #if 0 == 0:
             self.start = datetime.now()
             self.save()
 
@@ -64,6 +64,11 @@ class Task(models.Model):
                 job.stderr = result.get('stderr')
                 job.save()
 
+            for job in self.job_set.all():
+                if job.rc is None:
+                    job.rc = 1
+                    job.save()
+
             self.save()
 
             # clean tmp dir
@@ -78,7 +83,7 @@ class Job(models.Model):
     cmd = models.TextField(null = False, blank = False)
     start = models.DateTimeField(null = True)
     end = models.DateTimeField(null = True)
-    rc = models.IntegerField(default = 1) 
+    rc = models.IntegerField(null = True) 
     stdout = models.TextField(null = True)
     stderr = models.TextField(null = True)
 

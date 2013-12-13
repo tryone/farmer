@@ -1,20 +1,26 @@
 {% extends "base.html" %}
 {% block content %}
-{% if failed_jobs %}
-<h1>Failed Jobs</h1>
-<ol>
-{% for job in failed_jobs %}
-<li>{{ job.host }} : {{ job.stderr }}</li>
+<h1>There are {{ jobs | length }} jobs in total</h1>
+<table class = 'table'>
+    <thead>
+        <tr>
+            <th>Host</th>
+            <th class = 'detail-command'>Command</th>
+            <th>Return Code</th>
+            <th>Start Time</th>
+            <th>End Time</th>
+        </tr>
+    </thead>
+    <tbody>
+{% for job in jobs %}
+        <tr>
+            <td>{{ job.host }}</td>
+            <td>{{ job.cmd }}</td>
+            <td>{{ job.rc }}</td>
+            <td>{{ job.start | date:"Y-m-d G:i:s" }}</td>
+            <td>{{ job.end | date:"Y-m-d G:i:s" }}</td>
+        </tr>
 {% endfor %}
-</ol>
-{% endif %}
-
-{% if succeed_jobs %}
-<h1>Succeed Jobs</h1>
-<ol>
-{% for job in succeed_jobs %}
-<li>{{ job.host }} : {{ job.stdout }}</li>
-{% endfor %}
-</ol>
-{% endif %}
+    </tbody>
+</table>
 {% endblock %}

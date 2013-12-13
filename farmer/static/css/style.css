@@ -10,7 +10,7 @@ body {
   font-size: 1.4em;
 }
 div.container {
-  width: 92%;
+  width: 97%;
   padding-top: 5px;
   padding-bottom: 5px;
   margin-left: auto;
@@ -91,6 +91,10 @@ main {
   background-color: white;
   color: rgb(86, 61, 124);
   text-decoration: none;
+}
+
+th.detail-command {
+  width: 50%;
 }
 
 
