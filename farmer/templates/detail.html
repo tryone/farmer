@@ -22,14 +22,10 @@
     </tr>
     <tr class = 'hidden-text'>
       <td colspan = '5'>
-        <h3>stdout &#187;</h3>
-        <pre>
-          {{ job.stdout }}
-        </pre>
-        <h3>stderr &#187;</h3>
-        <pre>
-          {{ job.stderr }}
-        </pre>
+        <h3 class = 'green-text'>stdout &#187;</h3>
+        <pre>{{ job.stdout }}</pre>
+        <h3 class = 'red-text'>stderr &#187;</h3>
+        <pre>{{ job.stderr }}</pre>
       </td>
     </tr>
 {% endfor %}

@@ -116,6 +116,16 @@ pre {
   border: none;
 }
 
+.green-text {
+  font-weight: bold;
+  color: #7A7;
+}
+
+.red-text {
+  font-weight: bold;
+  color: #F77;
+}
+
 
 
 
