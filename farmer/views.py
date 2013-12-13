@@ -1,10 +1,16 @@
-
 import json
 
 from django.shortcuts import render_to_response, redirect
 from django.contrib.admin.views.decorators import staff_member_required
 
 from farmer.models import Job
+
+def run_job(inventories, cmd):
+    job = Job()
+    job.inventories = inventories
+    job.cmd = cmd
+    job.run()
+
 
 @staff_member_required
 def home(request):
@@ -13,10 +19,7 @@ def home(request):
         cmd = request.POST.get('cmd', '')
         if '' in [inventories.strip(), cmd.strip()]:
             return redirect('/')
-        job = Job()
-        job.inventories = inventories
-        job.cmd = cmd
-        job.run()
+        run_job(inventories, cmd)
         return redirect('/')
     else:
         jobs = Job.objects.all().order_by('-id')
@@ -53,10 +56,5 @@ def retry(request, id):
             inventories = ':'.join(failures)
         else:
             inventories = job.inventories
-    newjob = Job()
-    newjob.inventories = inventories
-    newjob.cmd = job.cmd
-    newjob.run()
+    run_job(inventories, job.cmd)
     return redirect('/')
-
-
