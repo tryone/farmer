@@ -47,8 +47,6 @@ def retry(request, id):
 def rerun(request, id):
     assert(request.method == 'GET')
     task = Task.objects.get(id = id)
-    failure_hosts = [job.host for job in task.job_set.all() if job.rc]
-    assert(len(failure_hosts) == 0)
     newtask = Task()
     newtask.inventories = task.inventories
     newtask.cmd = task.cmd

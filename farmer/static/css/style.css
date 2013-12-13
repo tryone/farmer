@@ -107,7 +107,13 @@ th.detail-command, .home-shell-command {
 }
 
 .tr-before-hidden-text:hover + tr {
-  display: table-cell;
+  display: table-row;
+}
+
+pre {
+  background-color: inherit;
+  color: white;
+  border: none;
 }
 
 
