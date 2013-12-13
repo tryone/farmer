@@ -33,3 +33,6 @@ view it in `http://your-domain:6969`
 # Features
 * async task execution with os.fork()
 * re-run cmd on those failed hosts by a `retry` button
+
+# Todo
+* start a Thread in the child process, to update job info in realtime by monitoring -t tree( who can help me )
