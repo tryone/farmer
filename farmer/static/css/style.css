@@ -102,6 +102,14 @@ th.detail-command, .home-shell-command {
   width: 30px;
 }
 
+.hidden-text {
+  display: none;
+}
+
+.tr-before-hidden-text:hover + tr {
+  display: table-cell;
+}
+
 
 
 

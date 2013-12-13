@@ -13,15 +13,19 @@
   </thead>
   <tbody>
 {% for job in jobs %}
-    <tr>
+    <tr class = 'tr-before-hidden-text'>
       <td>{{ job.host }}</td>
       <td>{{ job.cmd }}</td>
       <td>{{ job.rc }}</td>
       <td>{{ job.start | date:"Y-m-d G:i:s" }}</td>
       <td>{{ job.end | date:"Y-m-d G:i:s" }}</td>
     </tr>
-    <tr>
-      <t
+    <tr class = 'hidden-text'>
+      <td colspan = '5'>
+          {{ job.stdout }}
+          {{ job.stderr }}
+      </td>
+    </tr>
 {% endfor %}
   </tbody>
 </table>
