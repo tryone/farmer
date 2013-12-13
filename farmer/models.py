@@ -8,7 +8,7 @@ from commands import getstatusoutput
 
 from django.db import models
 
-class Job(models.Model):
+class Task(models.Model):
 
     # hosts, like web_servers:host1 .
     inventories = models.TextField(null = False, blank = False)
@@ -23,8 +23,6 @@ class Job(models.Model):
     # return code of this job
     rc = models.IntegerField(null = True) 
 
-    result = models.TextField(null = True)
-
     start = models.DateTimeField(null = True)
     end = models.DateTimeField(null = True)
 
@@ -37,22 +35,54 @@ class Job(models.Model):
     def run(self):
         if os.fork() == 0:
         #if 0 == 0:
-            tmpdir = '/tmp/ansible_%s' % time.time()
-            os.mkdir(tmpdir)
             self.start = datetime.now()
             self.save()
+
+            # initial jobs
+            cmd_shell = self.cmd_shell + ' --list-hosts'
+            status, output = getstatusoutput(cmd_shell)
+            hosts = map(str.strip, output.splitlines())
+            for host in hosts:
+                self.job_set.add(Job(host = host, cmd = self.cmd))
+
+            # run ansible
+            tmpdir = '/tmp/ansible_%s' % self.id
+            os.mkdir(tmpdir)
             cmd_shell = self.cmd_shell + ' -t ' + tmpdir
             status, output = getstatusoutput(cmd_shell)
-            self.end = datetime.now()
-            result = {}
-            for f in os.listdir(tmpdir):
-                result[f] = json.loads(open(tmpdir + '/' + f).read())
+
             self.rc = status
-            self.result = json.dumps(result)
+            self.end = datetime.now()
+            
+            for f in os.listdir(tmpdir):
+                result = json.loads(open(tmpdir + '/' + f).read())
+                job = self.job_set.get(host = f)
+                job.start = result.get('start')
+                job.end = result.get('end')
+                job.rc = result.get('rc')
+                job.stdout = result.get('stdout')
+                job.stderr = result.get('stderr')
+                job.save()
+
             self.save()
+
+            # clean tmp dir
             os.system('rm -rf ' + tmpdir)
 
     def __unicode__(self):
         return self.cmd_shell
+
+class Job(models.Model):
+    task = models.ForeignKey(Task)
+    host = models.TextField(null = False, blank = False)
+    cmd = models.TextField(null = False, blank = False)
+    start = models.DateTimeField(null = True)
+    end = models.DateTimeField(null = True)
+    rc = models.IntegerField(null = True) 
+    stdout = models.TextField(null = True)
+    stderr = models.TextField(null = True)
+
+    def __unicode__(self):
+        return self.host + ' : ' + self.cmd
 
 
