@@ -131,6 +131,7 @@ pre {
 }
 
 table tbody tr td a.anchor {
+  color: white;
   font-weight: bold;
   border: none;
   text-decoration: none;
@@ -138,6 +139,7 @@ table tbody tr td a.anchor {
   margin: none;
 }
 table tbody tr td a.anchor:hover {
+  color: white;
   background-color: inherit;
 }
 
