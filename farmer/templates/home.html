@@ -7,7 +7,7 @@
       <th>Shell Command</th>
       <th>Start / End Time</th>
       <th>Succeed?</th>
-      <th colspan = '3'>More Action</th>
+      <th colspan = '3'></th>
     </tr>
   </thead>
   <tbody>
@@ -25,23 +25,23 @@
       </td>
       <td>
         {% if task.rc == 0 %}
-        yes
+        <span class = 'green-text'>yes</span>
         {% elif task.rc %}
-        no
+        <span class = 'red-text'>no</span>
         {% else %}
         N/A
         {% endif %}
       </td>
       <td>
-        <a class = 'green-text' href = '/detail/{{ task.id }}'>detail</a>
+        <a href = '/detail/{{ task.id }}'>detail</a>
       </td>
       <td>
         {% if task.rc %}
-        <a class = 'red-text' href = '/retry/{{ task.id }}'>retry</a>
+        <a href = '/retry/{{ task.id }}'>retry</a>
         {% endif %}
       </td>
       <td>
-        <a class = 'red-text' href = '/rerun/{{ task.id }}'>rerun</a>
+        <a href = '/rerun/{{ task.id }}'>rerun</a>
       </td>
     </tr>
 {% endfor %}
