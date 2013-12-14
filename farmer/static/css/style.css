@@ -10,7 +10,7 @@ body {
   font-size: 1.4em;
 }
 div.container {
-  width: 92%;
+  width: 97%;
   padding-top: 5px;
   padding-bottom: 5px;
   margin-left: auto;
@@ -77,7 +77,10 @@ main {
 }
 
 .table > tbody > tr > td > a {
+/*
   font-weight: bold;
+  text-decoration: underline;
+*/
   color: white;
   border: 1px solid white;
   border-radius: 4px;
@@ -88,10 +91,61 @@ main {
 }
 
 .table > tbody > tr > td > a:hover {
+/*
+  color: white;
+*/
   background-color: white;
-  color: rgb(86, 61, 124);
   text-decoration: none;
+  color: rgb(86, 61, 124);
 }
+
+th.detail-command, .home-shell-command {
+  width: 56%;
+  word-break: break-all;
+}
+
+.th-id {
+  width: 30px;
+}
+
+.hidden-text {
+  display: none;
+}
+
+.tr-before-hidden-text:hover + tr {
+  display: table-row;
+}
+
+pre {
+  background-color: inherit;
+  color: white;
+  border: none;
+}
+
+.green-text {
+  color: #9F9;
+}
+
+.red-text {
+  color: #F55;
+}
+
+.blue-text {
+  color: #99F;
+}
+
+.white-text {
+  color: white;
+}
+
+a.anchor {
+  border: none;
+  text-decoration: none;
+  padding: none;
+  margin: none;
+}
+
+
 
 
 /*

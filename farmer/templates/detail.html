@@ -1,20 +1,38 @@
 {% extends "base.html" %}
 {% block content %}
-{% if failures %}
-<h1>Failures</h1>
-<ol>
-{% for k, v in failures.items %}
-<li>{{ k }} : {{ v }}</li>
+<h1>There are <span class = 'white-text'>{{ jobs | length }}</span> jobs in total</h1>
+<table class = 'table'>
+  <thead>
+    <tr>
+      <th>Host</th>
+      <th class = 'detail-command'>Command</th>
+      <th>Return Code</th>
+      <th>Start Time</th>
+      <th>End Time</th>
+      <th></th>
+    </tr>
+  </thead>
+  <tbody>
+{% for job in jobs %}
+    <tr>
+      <td>{{ job.host }}</td>
+      <td><span class = 'white-text'>{{ job.cmd }}</span></td>
+      <td>{{ job.rc }}</td>
+      <td>{{ job.start | date:"Y-m-d G:i:s" }}</td>
+      <td>{{ job.end | date:"Y-m-d G:i:s" }}</td>
+      <td><a href = '/detail/{{ task.id }}/?jobid={{ job.id }}'>More &#187;</a></td>
+    </tr>
+    {% if job.id == jobid %}
+    <tr>
+      <td colspan = '6'>
+        <h3 class = 'green-text'>stdout &#187;</h3>
+        <pre>{{ job.stdout }}</pre>
+        <h3 class = 'red-text'>stderr &#187;</h3>
+        <pre>{{ job.stderr }}</pre>
+      </td>
+    </tr>
+    {% endif %}
 {% endfor %}
-</ol>
-{% endif %}
-
-{% if success %}
-<h1>Success</h1>
-<ol>
-{% for k, v in success.items %}
-<li>{{ k }} : {{ v }}</li>
-{% endfor %}
-</ol>
-{% endif %}
+  </tbody>
+</table>
 {% endblock %}
