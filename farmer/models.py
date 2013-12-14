@@ -3,10 +3,13 @@
 import os
 import time
 import json
+import threading
 from datetime import datetime
 from commands import getstatusoutput
 
 from django.db import models
+
+from farmer.settings import WORKER_TIMEOUT, ANSIBLE_FORKS
 
 class Task(models.Model):
 
@@ -29,8 +32,12 @@ class Task(models.Model):
     @property
     def cmd_shell(self):
         option = self.sudo and '--sudo' or ''
-        option += ' -f 20 -m shell'
+        option += ' -f %s -m shell' % ANSIBLE_FORKS
         return 'ansible %s %s -a "%s"' % (self.inventories, option, self.cmd)
+
+    @property
+    def tmpdir(self):
+        return '/tmp/ansible_%s' % self.id
 
     def run(self):
         if os.fork() == 0:
@@ -45,17 +52,33 @@ class Task(models.Model):
             for host in hosts:
                 self.job_set.add(Job(host = host, cmd = self.cmd))
 
-            # run ansible
-            tmpdir = '/tmp/ansible_%s' % self.id
-            os.mkdir(tmpdir)
-            cmd_shell = self.cmd_shell + ' -t ' + tmpdir
-            status, output = getstatusoutput(cmd_shell)
+            os.mkdir(self.tmpdir)
 
-            self.rc = status
-            self.end = datetime.now()
-            
-            for f in os.listdir(tmpdir):
-                result = json.loads(open(tmpdir + '/' + f).read())
+            t = threading.Thread(target = self.collect_result)
+            t.setDaemon(True)
+            t.start()
+
+            # run ansible
+            cmd_shell = self.cmd_shell + ' -t ' + self.tmpdir
+            status, output = getstatusoutput(cmd_shell)
+            self.status = status
+            self.save()
+
+    def collect_result(self):
+
+        now = time.time()
+
+        while True:
+            # timeout
+            if time.time() - now > WORKER_TIMEOUT:
+                break
+
+            # if there is none job whose rc is None: break
+            if not filter(lambda job: job.rc is None, self.job_set.all()):
+                break
+
+            for f in os.listdir(self.tmpdir):
+                result = json.loads(open(self.tmpdir + '/' + f).read())
                 job = self.job_set.get(host = f)
                 job.start = result.get('start')
                 job.end = result.get('end')
@@ -63,16 +86,21 @@ class Task(models.Model):
                 job.stdout = result.get('stdout')
                 job.stderr = result.get('stderr')
                 job.save()
+                os.unlink(os.path.join(self.tmpdir, f)) # clean it
+            
+            time.sleep(1)
 
-            for job in self.job_set.all():
-                if job.rc is None:
-                    job.rc = 1
-                    job.save()
+        if self.rc != 0 and filter(lambda job: job.rc or job.rc is None, self.job_set.all()):
+            self.rc = 1
+        else:
+            self.rc = 0
 
-            self.save()
-
-            # clean tmp dir
-            os.system('rm -rf ' + tmpdir)
+        self.end = datetime.now()
+        self.save()
+        # clean tmp dir
+        os.system('rm -rf ' + self.tmpdir)
+        #sys.exit(self.rc or 1 )
+        
 
     def __unicode__(self):
         return self.cmd_shell

@@ -5,6 +5,7 @@ from django.shortcuts import render_to_response, redirect
 from django.contrib.admin.views.decorators import staff_member_required
 
 from farmer.models import Task, Job
+from farmer.settings import NUMBER_OF_TASK_PER_PAGE
 
 @staff_member_required
 def home(request):
@@ -19,7 +20,7 @@ def home(request):
         task.run()
         return redirect('/')
     else:
-        tasks = Task.objects.all().order_by('-id')
+        tasks = Task.objects.all().order_by('-id')[:NUMBER_OF_TASK_PER_PAGE]
         return render_to_response('home.html', locals())
 
 @staff_member_required
