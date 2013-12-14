@@ -3,25 +3,45 @@
 <table class="table">
   <thead>
     <tr>
-      <th>#</th>
+      <th class = 'th-id'>ID</th>
       <th>Shell Command</th>
-      <th>Start / End</th>
-      <th>Return Code</th>
-      <th>More &#187;</th>
+      <th>Start / End Time</th>
+      <th>Succeed?</th>
+      <th colspan = '3'></th>
     </tr>
   </thead>
   <tbody>
-{% for job in jobs %}
+{% for task in tasks %}
     <tr>
-      <td style = 'width: 30px;'>{{ job.id }}</td>
-      <td style = 'width: 800px;'>{{ job.cmd_shell }}</td>
-      <td>{{ job.start }} <br /> {{ job.end }}</td>
-      <td>{{ job.rc }}</td>
-      <td style = 'width: 150px;'>
-        <a href = '/detail/{{ job.id }}'>detail</a>
-        {% if job.rc != '0' %}
-        <a href = '/retry/{{ job.id }}'>retry</a>
+      <td>{{ task.id }}</td>
+      <td class = 'home-shell-command'>{{ task.cmd_shell }}</td>
+      <td>
+        {{ task.start | date:"Y-m-d G:i:s" }}<br />
+        {% if task.end %}
+        {{ task.end | date:"Y-m-d G:i:s" }}
+        {% else %}
+        N/A
         {% endif %}
+      </td>
+      <td>
+        {% if task.rc == 0 %}
+        <span class = 'green-text'>yes</span>
+        {% elif task.rc %}
+        <span class = 'red-text'>no</span>
+        {% else %}
+        N/A
+        {% endif %}
+      </td>
+      <td>
+        <a href = '/detail/{{ task.id }}'>detail</a>
+      </td>
+      <td>
+        {% if task.rc %}
+        <a href = '/retry/{{ task.id }}'>retry</a>
+        {% endif %}
+      </td>
+      <td>
+        <a href = '/rerun/{{ task.id }}'>rerun</a>
       </td>
     </tr>
 {% endfor %}

@@ -5,9 +5,9 @@ an async task execution app based on ansible
 
 # First Of All !
 
-you should deploy your ansible cluster
+you should deploy your [ansible](https://github.com/ansible/ansible) cluster
 
-see: https://github.com/ansible/ansible
+see: http://www.ansibleworks.com/docs/intro_getting_started.html
 
 #Screenshot
 ![Screenshot](https://raw.github.com/douban/farmer/master/farmer.png)
@@ -33,3 +33,6 @@ view it in `http://your-domain:6969`
 # Features
 * async task execution with os.fork()
 * re-run cmd on those failed hosts by a `retry` button
+
+# Todo
+* start a Thread in the child process, to update job info in realtime by monitoring -t tree( who can help me )
