@@ -130,11 +130,15 @@ pre {
   color: white;
 }
 
-a.anchor {
+table tbody tr td a.anchor {
+  font-weight: bold;
   border: none;
   text-decoration: none;
   padding: none;
   margin: none;
+}
+table tbody tr td a.anchor:hover {
+  background-color: inherit;
 }
 
 

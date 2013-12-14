@@ -6,7 +6,6 @@ import sys
 import time
 import json
 import threading
-from tempfile import mkdtemp
 from datetime import datetime
 from commands import getstatusoutput
 
@@ -31,8 +30,6 @@ class Task(models.Model):
 
     start = models.DateTimeField(null = True, blank = False)
     end = models.DateTimeField(null = True, blank = False)
-
-    tmpdir =  mkdtemp(prefix='ansible_', dir='/tmp')
 
     @property
     def cmd_shell(self):
@@ -59,9 +56,12 @@ class Task(models.Model):
 
             for host in hosts:
                 self.job_set.add(Job(host = host, cmd = self.cmd))
+            self.save()
 
+            # make dir before run thread
             os.mkdir(self.tmpdir)
 
+            # start a thread to monitor self.tmpdir
             t = threading.Thread(target = self.collect_result)
             t.setDaemon(True)
             t.start()
@@ -69,6 +69,8 @@ class Task(models.Model):
             # run ansible
             cmd_shell = self.cmd_shell + ' -t ' + self.tmpdir
             status, output = getstatusoutput(cmd_shell)
+
+            # execution is perfect in WORKER_TIMEOUT seconds
             self.status = status
             self.save()
 
