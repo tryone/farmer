@@ -10,7 +10,8 @@ you should deploy your [ansible](https://github.com/ansible/ansible) cluster
 see: http://www.ansibleworks.com/docs/intro_getting_started.html
 
 #Screenshot
-![Screenshot](https://raw.github.com/douban/farmer/master/farmer.png)
+![Screenshot](https://raw.github.com/douban/farmer/master/farmer-home.png)
+![Screenshot](https://raw.github.com/douban/farmer/master/farmer-detail.png)
 
 # Running
 
