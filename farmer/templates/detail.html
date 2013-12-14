@@ -16,7 +16,7 @@
 {% for job in jobs %}
     <tr>
       <td>{{ job.host }}</td>
-      <td>{{ job.cmd }}</td>
+      <td><span class = 'white-text'>{{ job.cmd }}</span></td>
       <td>{{ job.rc }}</td>
       <td>{{ job.start | date:"Y-m-d G:i:s" }}</td>
       <td>{{ job.end | date:"Y-m-d G:i:s" }}</td>
