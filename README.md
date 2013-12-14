@@ -32,8 +32,7 @@ python manage.py runserver 0.0.0.0:6969
 view it in `http://your-domain:6969`
 
 # Features
-* async task execution with os.fork()
-* re-run cmd on those failed hosts by a `retry` button
+* async task execution with os.fork(), threading.Thread
+* `retry` cmd on those failed hosts by a `retry` button
+* `rerun` any task
 
-# Todo
-* start a Thread in the child process, to update job info in realtime by monitoring -t tree( who can help me )
