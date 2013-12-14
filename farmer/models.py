@@ -1,9 +1,12 @@
 #coding=utf8
+from __future__ import with_statement
 
 import os
+import sys
 import time
 import json
 import threading
+from tempfile import mkdtemp
 from datetime import datetime
 from commands import getstatusoutput
 
@@ -17,17 +20,19 @@ class Task(models.Model):
     inventories = models.TextField(null = False, blank = False)
 
     # 0, do not use sudo; 1, use sudo .
-    sudo = models.BooleanField(default = True) 
+    sudo = models.BooleanField(default = True)
 
     # for example: ansible web_servers -m shell -a 'du -sh /tmp'
     # the 'du -sh /tmp' is cmd here
     cmd = models.TextField(null = False, blank = False)
 
     # return code of this job
-    rc = models.IntegerField(null = True) 
+    rc = models.IntegerField(null = True)
 
     start = models.DateTimeField(null = True, blank = False)
     end = models.DateTimeField(null = True, blank = False)
+
+    tmpdir =  mkdtemp(prefix='ansible_', dir='/tmp')
 
     @property
     def cmd_shell(self):
@@ -42,13 +47,16 @@ class Task(models.Model):
     def run(self):
         if os.fork() == 0:
         #if 0 == 0:
+
             self.start = datetime.now()
             self.save()
 
             # initial jobs
             cmd_shell = self.cmd_shell + ' --list-hosts'
             status, output = getstatusoutput(cmd_shell)
+
             hosts = map(str.strip, output.splitlines())
+
             for host in hosts:
                 self.job_set.add(Job(host = host, cmd = self.cmd))
 
@@ -78,15 +86,16 @@ class Task(models.Model):
                 break
 
             for f in os.listdir(self.tmpdir):
-                result = json.loads(open(self.tmpdir + '/' + f).read())
-                job = self.job_set.get(host = f)
-                job.start = result.get('start')
-                job.end = result.get('end')
-                job.rc = result.get('rc')
-                job.stdout = result.get('stdout')
-                job.stderr = result.get('stderr')
-                job.save()
-                os.unlink(os.path.join(self.tmpdir, f)) # clean it
+                with open(os.path.join(self.tmpdir, f)) as rf:
+                    result = json.loads(rf.read())
+                    job = self.job_set.get(host = f)
+                    job.start = result.get('start')
+                    job.end = result.get('end')
+                    job.rc = result.get('rc')
+                    job.stdout = result.get('stdout')
+                    job.stderr = result.get('stderr')
+                    job.save()
+                    os.unlink(os.path.join(self.tmpdir, f)) # clean it
             
             time.sleep(1)
 
@@ -98,9 +107,8 @@ class Task(models.Model):
         self.end = datetime.now()
         self.save()
         # clean tmp dir
-        os.system('rm -rf ' + self.tmpdir)
-        #sys.exit(self.rc or 1 )
-        
+        os.removedirs(self.tmpdir)
+        sys.exit(self.rc)
 
     def __unicode__(self):
         return self.cmd_shell

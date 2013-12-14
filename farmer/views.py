@@ -1,4 +1,3 @@
-
 import json
 
 from django.shortcuts import render_to_response, redirect
@@ -7,6 +6,13 @@ from django.contrib.admin.views.decorators import staff_member_required
 from farmer.models import Task, Job
 from farmer.settings import NUMBER_OF_TASK_PER_PAGE
 
+def run_task(inventories, cmd):
+    task = Task()
+    task.inventories = inventories
+    task.cmd = cmd
+    task.run()
+
+
 @staff_member_required
 def home(request):
     if request.method == 'POST':
@@ -14,10 +20,7 @@ def home(request):
         cmd = request.POST.get('cmd', '')
         if '' in [inventories.strip(), cmd.strip()]:
             return redirect('/')
-        task = Task()
-        task.inventories = inventories
-        task.cmd = cmd
-        task.run()
+        run_task(inventories, cmd)
         return redirect('/')
     else:
         tasks = Task.objects.all().order_by('-id')[:NUMBER_OF_TASK_PER_PAGE]
@@ -39,23 +42,17 @@ def detail(request, id):
 def retry(request, id):
     assert(request.method == 'GET')
     task = Task.objects.get(id = id)
-    failure_hosts = [job.host for job in task.job_set.all() if job.rc]
+    failure_hosts = [job.host for job in task.job_set.all() if job.rc or job.rc is None]
     assert(failure_hosts)
-    newtask = Task()
-    newtask.inventories = ':'.join(failure_hosts)
-    newtask.cmd = task.cmd
-    newtask.run()
+    inventories = ':'.join(failure_hosts)
+    run_task(inventories, task.cmd)
     return redirect('/')
 
 @staff_member_required
 def rerun(request, id):
     assert(request.method == 'GET')
     task = Task.objects.get(id = id)
-    newtask = Task()
-    newtask.inventories = task.inventories
-    newtask.cmd = task.cmd
-    newtask.run()
+    run_task(task.inventories, task.cmd)
     return redirect('/')
-
 
 
