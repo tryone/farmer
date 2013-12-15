@@ -5,9 +5,10 @@
     <tr>
       <th class = 'th-id'>ID</th>
       <th>Shell Command</th>
-      <th>Start / End Time</th>
+      <th>Start Time</th>
+      <th>End Time</th>
       <th>Succeed?</th>
-      <th colspan = '3'></th>
+      <th></th>
     </tr>
   </thead>
   <tbody>
@@ -17,6 +18,8 @@
       <td class = 'white-text home-shell-command'>{{ task.cmd_shell }}</td>
       <td>
         {{ task.start | date:"Y-m-d G:i:s" }}<br />
+      </td>
+      <td>
         {% if task.end %}
         {{ task.end | date:"Y-m-d G:i:s" }}
         {% else %}
@@ -32,16 +35,12 @@
         N/A
         {% endif %}
       </td>
-      <td>
-        <a href = '/detail/{{ task.id }}'>detail</a>
-      </td>
-      <td>
+      <td class = 'home-actions'>
         {% if task.rc %}
         <a href = '/retry/{{ task.id }}'>retry</a>
         {% endif %}
-      </td>
-      <td>
         <a href = '/rerun/{{ task.id }}'>rerun</a>
+        <a href = '/detail/{{ task.id }}'>detail</a>
       </td>
     </tr>
 {% endfor %}
