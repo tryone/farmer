@@ -9,7 +9,7 @@ from openid.store import filestore
 from django.shortcuts import HttpResponse
 from django.conf import settings
 
-from farmer.utils import (HttpResponseSeeOther, require_login,
+from farmer.openid import (HttpResponseSeeOther, require_login,
         USER_COOKIE_NAME, uid_from_session)
 
 

@@ -5,7 +5,7 @@ from django.contrib.admin.views.decorators import staff_member_required
 
 from farmer.models import Task, Job
 from farmer.settings import NUMBER_OF_TASK_PER_PAGE
-from farmer.utils import require_login
+from farmer.openid import require_login
 
 
 def run_task(request, inventories, cmd):
