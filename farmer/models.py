@@ -81,6 +81,11 @@ class Task(models.Model):
         while True:
             # timeout
             if time.time() - now > WORKER_TIMEOUT:
+                for job in self.job_set.all():
+                    if job.rc is None:
+                        job.rc = 1
+                        job.stderr = 'job timeout' # marked as 'TIMEOUT'
+                        job.save()
                 break
 
             # if there is none job whose rc is None: break

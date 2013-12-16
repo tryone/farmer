@@ -35,14 +35,18 @@ def detail(request, id):
     else:
         jobid = -1
     task = Task.objects.get(id = id)
-    jobs = task.job_set.all().order_by('-rc')
+    #jobs = task.job_set.all().order_by('-rc')
+    jobs = task.job_set.all()
+    jobs_succeed = [ job for job in jobs if job.rc == 0 ]
+    jobs_failed = [ job for job in jobs if job.rc != 0 ]
+    jobs = jobs_failed + jobs_succeed
     return render_to_response('detail.html', locals())
 
 @staff_member_required
 def retry(request, id):
     assert(request.method == 'GET')
     task = Task.objects.get(id = id)
-    failure_hosts = [job.host for job in task.job_set.all() if job.rc or job.rc is None]
+    failure_hosts = [job.host for job in task.job_set.all() if job.rc != 0]
     assert(failure_hosts)
     inventories = ':'.join(failure_hosts)
     run_task(inventories, task.cmd)
