@@ -1,4 +1,4 @@
-farmer
+Farmer
 ======
 
 an async task execution app based on ansible
@@ -10,7 +10,8 @@ you should deploy your [ansible](https://github.com/ansible/ansible) cluster
 see: http://www.ansibleworks.com/docs/intro_getting_started.html
 
 #Screenshot
-![Screenshot](https://raw.github.com/douban/farmer/master/farmer.png)
+![Screenshot](https://raw.github.com/douban/farmer/master/farmer/static/images/farmer-home.png)
+![Screenshot](https://raw.github.com/douban/farmer/master/farmer/static/images/farmer-detail.png)
 
 # Running
 
@@ -31,8 +32,7 @@ python manage.py runserver 0.0.0.0:6969
 view it in `http://your-domain:6969`
 
 # Features
-* async task execution with os.fork()
-* re-run cmd on those failed hosts by a `retry` button
+* async task execution with os.fork(), threading.Thread
+* `retry` cmd on those failed hosts by a `retry` button
+* `rerun` any task
 
-# Todo
-* start a Thread in the child process, to update job info in realtime by monitoring -t tree( who can help me )

@@ -100,20 +100,12 @@ main {
 }
 
 th.detail-command, .home-shell-command {
-  width: 56%;
+  width: 48%;
   word-break: break-all;
 }
 
 .th-id {
   width: 30px;
-}
-
-.hidden-text {
-  display: none;
-}
-
-.tr-before-hidden-text:hover + tr {
-  display: table-row;
 }
 
 pre {
@@ -138,11 +130,23 @@ pre {
   color: white;
 }
 
-a.anchor {
+table tbody tr td a.anchor {
+  color: white;
+  font-weight: bold;
   border: none;
   text-decoration: none;
   padding: none;
   margin: none;
+}
+
+table tbody tr td a.anchor:hover {
+  color: white;
+  background-color: inherit;
+}
+
+.home-actions {
+  width: 180px;
+  text-align: right;
 }
 
 

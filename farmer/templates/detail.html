@@ -1,6 +1,6 @@
 {% extends "base.html" %}
 {% block content %}
-<h1>There are <span class = 'white-text'>{{ jobs | length }}</span> jobs in total</h1>
+<h1><span class = 'white-text'>There are {{ jobs | length }} jobs in total</span>, <span class = 'green-text'>{{ jobs_succeed | length }} succeed</span>, <span class = 'red-text'>{{ jobs_failed | length }} failed</span>.</h1>
 <table class = 'table'>
   <thead>
     <tr>
@@ -15,12 +15,12 @@
   <tbody>
 {% for job in jobs %}
     <tr>
-      <td>{{ job.host }}</td>
+      <td><a class = 'anchor' name = '{{ job.id }}'>{{ job.host }}</a></td>
       <td><span class = 'white-text'>{{ job.cmd }}</span></td>
       <td>{{ job.rc }}</td>
       <td>{{ job.start | date:"Y-m-d G:i:s" }}</td>
       <td>{{ job.end | date:"Y-m-d G:i:s" }}</td>
-      <td><a href = '/detail/{{ task.id }}/?jobid={{ job.id }}'>More &#187;</a></td>
+      <td><a href="{% url 'detail' id=task.id %}?jobid={{ job.id }}#{{ job.id }}">More &#187;</a></td>
     </tr>
     {% if job.id == jobid %}
     <tr>
