@@ -12,10 +12,10 @@ from django.db import models
 from django.utils import six
 
 from farmer.settings import WORKER_TIMEOUT, ANSIBLE_FORKS
-if six.PY2:
-    from commands import getstatusoutput
-else:
+if six.PY3:
     from subprocess import getstatusoutput
+else:
+    from commands import getstatusoutput
 
 
 class Task(models.Model):
