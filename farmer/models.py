@@ -28,6 +28,8 @@ class Task(models.Model):
     # return code of this job
     rc = models.IntegerField(null = True)
 
+    farmer = models.TextField(null = False, blank = False)
+
     start = models.DateTimeField(null = True, blank = False)
     end = models.DateTimeField(null = True, blank = False)
 

@@ -19,4 +19,6 @@ urlpatterns = patterns('',
     url(r'^detail/(?P<id>\d+)/$', 'farmer.views.detail', name='detail'),
     url(r'^retry/(?P<id>\d+)/$', 'farmer.views.retry', name='retry'),
     url(r'^rerun/(?P<id>\d+)/$', 'farmer.views.rerun', name='rerun'),
+
+    url(r'^openid2/', include('farmer.openid2.urls')),
 )

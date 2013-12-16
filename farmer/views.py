@@ -5,28 +5,31 @@ from django.contrib.admin.views.decorators import staff_member_required
 
 from farmer.models import Task, Job
 from farmer.settings import NUMBER_OF_TASK_PER_PAGE
+from farmer.utils import require_login
 
-def run_task(inventories, cmd):
+
+def run_task(request, inventories, cmd):
     task = Task()
     task.inventories = inventories
     task.cmd = cmd
+    task.farmer = request.uid
     task.run()
 
 
-@staff_member_required
+@require_login
 def home(request):
     if request.method == 'POST':
         inventories = request.POST.get('inventories', '')
         cmd = request.POST.get('cmd', '')
         if '' in [inventories.strip(), cmd.strip()]:
             return redirect('/')
-        run_task(inventories, cmd)
+        run_task(request, inventories, cmd)
         return redirect('/')
     else:
         tasks = Task.objects.all().order_by('-id')[:NUMBER_OF_TASK_PER_PAGE]
         return render_to_response('home.html', locals())
 
-@staff_member_required
+@require_login
 def detail(request, id):
     assert(request.method == 'GET')
     jobid = request.GET.get('jobid', '')
@@ -42,21 +45,21 @@ def detail(request, id):
     jobs = jobs_failed + jobs_succeed
     return render_to_response('detail.html', locals())
 
-@staff_member_required
+@require_login
 def retry(request, id):
     assert(request.method == 'GET')
     task = Task.objects.get(id = id)
     failure_hosts = [job.host for job in task.job_set.all() if job.rc != 0]
     assert(failure_hosts)
     inventories = ':'.join(failure_hosts)
-    run_task(inventories, task.cmd)
+    run_task(request, inventories, task.cmd)
     return redirect('/')
 
-@staff_member_required
+@require_login
 def rerun(request, id):
     assert(request.method == 'GET')
     task = Task.objects.get(id = id)
-    run_task(task.inventories, task.cmd)
+    run_task(request, task.inventories, task.cmd)
     return redirect('/')
 
 
