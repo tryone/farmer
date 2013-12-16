@@ -8,6 +8,7 @@
       <th>Start Time</th>
       <th>End Time</th>
       <th>Succeed?</th>
+      <th>Who?</th>
       <th></th>
     </tr>
   </thead>
@@ -34,6 +35,9 @@
         {% else %}
         N/A
         {% endif %}
+      </td>
+      <td>
+        {{ request.user.username }}
       </td>
       <td class = 'home-actions'>
         {% if task.rc %}
