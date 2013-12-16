@@ -1,6 +1,6 @@
 {% extends "base.html" %}
 {% block content %}
-<h1>There are <span class = 'white-text'>{{ jobs | length }}</span> jobs in total</h1>
+<h1><span class = 'white-text'>There are {{ jobs | length }} jobs in total</span>, <span class = 'green-text'>{{ jobs_succeed | length }} succeed</span>, <span class = 'red-text'>{{ jobs_failed | length }} failed</span>.</h1>
 <table class = 'table'>
   <thead>
     <tr>
