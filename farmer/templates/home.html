@@ -37,10 +37,10 @@
       </td>
       <td class = 'home-actions'>
         {% if task.rc %}
-        <a href = '/retry/{{ task.id }}'>retry</a>
+        <a href="{% url 'retry' id=task.id %}">retry</a>
         {% endif %}
-        <a href = '/rerun/{{ task.id }}'>rerun</a>
-        <a href = '/detail/{{ task.id }}'>detail</a>
+        <a href="{% url 'rerun' id=task.id %}">rerun</a>
+        <a href="{% url 'detail' id=task.id %}">detail</a>
       </td>
     </tr>
 {% endfor %}
