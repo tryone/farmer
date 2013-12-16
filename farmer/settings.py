@@ -164,4 +164,5 @@ ANSIBLE_FORKS = 20
 
 # openid2
 OPENID_FILESTORE_PATH = '/tmp'
+SYSADMINS = ['huoxy', 'everbird', 'qianlong', 'flex']
 

@@ -8,6 +8,8 @@ from django.http.response import (HttpResponseRedirectBase,
         HttpResponseForbidden)
 from django.contrib.auth import models
 
+from farmer.settings import SYSADMINS
+
 
 USER_COOKIE_NAME = 'openid'
 DOUVATAR_URL = 'http://douvatar.dapps.douban.com/mirror/%s?s=32&r=x&d=http%%3A//img3.douban.com/icon/user_normal.jpg'
@@ -33,6 +35,8 @@ class RequireLogin(object):
         @wraps(func)
         def _(req, *args, **kwargs):
             if validate_cookie(req):
+                if req.uid not in SYSADMINS:
+                    return HttpResponseForbidden('who are you?')
                 return func(req, *args, **kwargs)
             return HttpResponseSeeOther('/openid2/login?continue=%s' % req.path)
         return _
