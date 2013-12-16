@@ -100,7 +100,7 @@ main {
 }
 
 th.detail-command, .home-shell-command {
-  width: 50%;
+  width: 48%;
   word-break: break-all;
 }
 
