@@ -15,12 +15,12 @@
   <tbody>
 {% for job in jobs %}
     <tr>
-      <td><a class = 'anchor' href = '#{{ job.id }}'>{{ job.host }}</a></td>
+      <td><a class = 'anchor' name = '{{ job.id }}'>{{ job.host }}</a></td>
       <td><span class = 'white-text'>{{ job.cmd }}</span></td>
       <td>{{ job.rc }}</td>
       <td>{{ job.start | date:"Y-m-d G:i:s" }}</td>
       <td>{{ job.end | date:"Y-m-d G:i:s" }}</td>
-      <td><a href="{% url 'detail' id=task.id %}?jobid={{ job.id }}">More &#187;</a></td>
+      <td><a href="{% url 'detail' id=task.id %}?jobid={{ job.id }}#{{ job.id }}">More &#187;</a></td>
     </tr>
     {% if job.id == jobid %}
     <tr>
